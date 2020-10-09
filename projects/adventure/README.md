@@ -1,15 +1,18 @@
 ## Description
 
 You are provided with a pre-generated graph consisting of 500 rooms. You are responsible for filling `traversal_path` with directions that, when walked in order, will visit every room on the map at least once.
+#Traversal bfs?
 
 Open `adv.py`. There are four parts to the provided code:
-
+#reference adventure game
 * World generation code. Do not modify this!
 * An incomplete list of directions. Your task is to fill this with valid traversal directions.
 * Test code. Run the tests by typing `python3 adv.py` in your terminal.
 * REPL code. You can uncomment this and run `python3 adv.py` to walk around the map.
 
+#try picking one of the smaller rooms to test
 
+#Gotta write these
 You may find the commands `player.current_room.id`, `player.current_room.get_exits()` and `player.travel(direction)` useful.
 
 To solve this path, you'll want to construct your own traversal graph. You start in room `0`, which contains exits `['n', 's', 'w', 'e']`. Your starting graph should look something like this:
@@ -19,6 +22,13 @@ To solve this path, you'll want to construct your own traversal graph. You start
   0: {'n': '?', 's': '?', 'w': '?', 'e': '?'}
 }
 ```
+Room 0, we don't know where n,s,w,e goes.
+#it's a traversal but we still have to walk back if we reach a dead end
+wants us to make a second graph, starting graph looking like the dictionary.
+Add an 's' to the traversal path to indicate we went south.
+#will need to make a backtracking algorithim
+#what's the nearest room that doesn't contain an unexplored path
+#look at the dictionary we've made to determine it.
 
 Try moving south and you will find yourself in room `5` which contains exits `['n', 's', 'e']`. You can now fill in some entries in your graph:
 
@@ -28,6 +38,7 @@ Try moving south and you will find yourself in room `5` which contains exits `['
   5: {'n': 0, 's': '?', 'e': '?'}
 }
 ```
+#number of keys in this dictionary is the number of rooms we visited, oncee that number reaches 500 we're done. (we've been to all 500 rooms)
 
 You know you are done when you have exactly 500 entries (0-499) in your graph and no `'?'` in the adjacency dictionaries. To do this, you will need to write a traversal algorithm that logs the path into `traversal_path` as it walks.
 
