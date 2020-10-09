@@ -27,11 +27,11 @@ class Queue():
 
 class Graph:
 	def __init__(self):
-		self.vertices = {}    # keys are all verts in the graph, values are sets of adj verts
+		self.vertices = {}
 
 	def add_vertex(self, vertex):
-		"""Add a new unconnected vert"""
-		self.vertices[vertex] = set()
+            if vertex not in self.vertices:
+                self.vertices[vertex] = set()
 
 	def add_edge(self, v_from, v_to):
 		if v_from in self.vertices and v_to in self.vertices:
@@ -39,75 +39,43 @@ class Graph:
 		else:
 			raise IndexError("nonexistent vertex")
 
-	def is_connected(self, v_from, v_to):
-		if v_from in self.vertices and v_to in self.vertices:
-			return v_to in self.vertices[v_from]
-		else:
-			raise IndexError("nonexistent vertex")
-
-	def get_neighbors2(self, v):
-		return self.vertices[v]
-
-
 def earliest_ancestor(ancestors, starting_node):
-    pass
-    #if acyclic either bfs and dfs
-    #take a starting node and see which node is the furthest away
-    #count of the steps taken
-    #if count is the same for two items return the smaller value
-    #return the length of every list
-    #assign value of the last index
-    #dictionary that coded the child from the parent
+    #bfs queue
+    g = Graph()
+    for pair in ancestors:
+            g.add_vertex(pair[0])
+            g.add_vertex(pair[1])
+            g.add_edge(pair[1], pair[0])
 
-def get_neighbors(ancestors, n): #test_anscestors = []
-    neighbors = []
-
-    for a in ancestors:
-        if a[1] == n:
-            neighbors.append(a[0])
-    return neighbors
-
-
-def bfs(self, starting_vertex_id, target_vertex_id):
-# 	# Create an empty queue and enqueue A PATH TO the starting vertex ID
     q = Queue()
-    visited = set()
-    q.enqueue([starting_vertex_id])
-    # Create a Set to store visited vertices
-# 	# While the queue is not empty...
+    max_path_len = 1
+    
+    oldest_ancestor = -1
+
+    q.enqueue([starting_node])
+
     while q.size() > 0:
-# 		# Dequeue the first PATH
 
         path = q.dequeue()
         v = path[-1]
-# 		# Grab the last vertex from the PATH
-        if v not in visited:
-            if v == target_vertex_id:
-                return path
-            
-            visited.add(v)
 
-            for neighbor in self.get_neighbors(v):
+        if len(path) > max_path_len:
+            max_path_len = len(path)
+            oldest_ancestor = v
+            print(v)
+        elif len(path) >= max_path_len and v < oldest_ancestor:
+            max_path_len = len(path)
+            oldest_ancestor = v
+            print(v)
+
+        for neighbor in g.vertices[v]:
                 new_path = path + [neighbor]
+                print(new_path)
                 q.enqueue(new_path)
-    return None
 
-def dft(self, starting_vertex_id):
-    q = Stack()
-    visited = set()
+    return oldest_ancestor
 
-    # Init:
-    q.push(starting_vertex_id)
 
-    # While queue isn't empty
-    while q.size() > 0:
+test_ancestors = [(1, 3), (2, 3), (3, 6), (5, 6), (5, 7), (4, 5), (4, 8), (8, 9), (11, 8), (10, 1)]
 
-        v = q.pop()
-
-        if v not in visited:
-            print(v)   # "Visit" the node
-
-            visited.add(v)
-
-            for neighbor in self.get_neighbors(v):
-                q.push(neighbor)
+earliest_ancestor(test_ancestors, 6)
